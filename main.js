@@ -2,6 +2,10 @@ var context = new webkitAudioContext();
 var buffer;
 var grains = []; //array for the grains for memory management
 var graincount = 0; // to iterate in the array with setInterval
+var w,h;
+var data;
+var bufferready = false;
+var datawidth = [];
 
 //the grain class
 function grain(buffer){
@@ -28,6 +32,21 @@ function grain(buffer){
 	
 }
 
+function play(){
+
+	setInterval(function(){
+		var g = new grain(buffer);
+		grains[graincount] = g;
+		graincount+=1;
+				
+		if(graincount > 20){
+			graincount = 0;
+		}
+
+	},50);
+			
+}
+
 //loading the sound with XML HTTP REQUEST
 var request = new XMLHttpRequest();
 	request.open('GET','2.mp3',true);
@@ -35,21 +54,42 @@ var request = new XMLHttpRequest();
 	request.onload = function(){
 		context.decodeAudioData(request.response,function(b){
 			buffer = b; //set the buffer
-			
-			//buffer is ready
-			/*
-			setInterval(function(){
-				var g = new grain(buffer);
-				grains[graincount] = g;
-				graincount+=1;
-				
-				if(graincount > 20){
-					graincount = 0;
-				}
+			data = buffer.getChannelData(0);
+			bufferready = true;
 
-			},50);
-			*/
-			
 		});
 	};
 request.send();
+
+
+//processing
+function sketch(p){
+	w = parseInt($('#waveform').css('width'),10);
+	h = parseInt($('#waveform').css('height'),10);
+	
+	p.setup = function(){
+		p.size(w,h);
+		p.background(0);
+		p.frameRate(24);
+		
+		//change the size on resize
+		$(window).resize(function(){
+			w = parseInt($('#waveform').css('width'),10);
+			h = parseInt($('#waveform').css('height'),10);
+			p.size(w,h);
+
+		});
+		
+	};
+
+	p.draw = function(){
+		//p.background(255);
+		
+	};
+}
+
+
+$(document).ready(function(){
+	var canvas = document.getElementById('canvas');
+	var processing = new Processing(canvas,sketch);
+});
