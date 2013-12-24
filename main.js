@@ -37,6 +37,7 @@ var request = new XMLHttpRequest();
 			buffer = b; //set the buffer
 			
 			//buffer is ready
+			/*
 			setInterval(function(){
 				var g = new grain(buffer);
 				grains[graincount] = g;
@@ -45,8 +46,9 @@ var request = new XMLHttpRequest();
 				if(graincount > 20){
 					graincount = 0;
 				}
-				
+
 			},50);
+			*/
 			
 		});
 	};
