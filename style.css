@@ -13,14 +13,14 @@ body{
 #header{
 	background: grey;
 	width: 100%;
-	height: 10%;
+	height: 5%;
 	padding: 0;
 	margin: 0;
 }
 #waveform{
 	background: black;
 	width: 100%;
-	height: 50%;
+	height: 55%;
 	padding: 0;
 	margin: 0;
 	//text-align: center;

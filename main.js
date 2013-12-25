@@ -6,11 +6,13 @@ var graincount = 0; // to iterate in the array with setInterval
 var w,h;
 var data;
 var drawingdata = []; //an array that keeps the data
-var voices = []; //an array for touch events
+var voices = []; //an array for touch events - polyphonic
+var voicesmono = []; //this will be used for mouse events - monophonic
 var isloaded = false;
 var X = 0;
 var Y = 0;
 var mouseState = false;
+
 
 
 
@@ -55,9 +57,15 @@ function grain(p,buffer,positionx,positiony){
 }
 
 //the voice class
-function voice(p){
+function voice(id){
 	
-	var that = this; //for scope issues
+	this.touchid = id; //the id of the touch event 
+	
+}
+
+//play function for mouse event
+voice.prototype.playmouse = function(p){
+	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
 		var g = new grain(p,buffer,p.mouseX,p.mouseY);
@@ -72,7 +80,24 @@ function voice(p){
 		that.timeout = setTimeout(that.play,100);
 	}
 	this.play();
-		
+}
+//play function for touch events - this will get the position from touch events
+voice.prototype.playtouch = function(p){
+	var that = this; //for scope issues	
+	this.play = function(){
+		//create new grain
+		var g = new grain(p,buffer,p.mouseX,p.mouseY);
+		//push to the array
+		grains[graincount] = g;
+		graincount+=1;
+				
+		if(graincount > 20){
+			graincount = 0;
+		}
+		//next interval
+		that.timeout = setTimeout(that.play,100);
+	}
+	this.play();
 }
 
 //stop method
@@ -90,12 +115,11 @@ var request = new XMLHttpRequest();
 			data = buffer.getChannelData(0);
 			isloaded = true;
 
-
 			//initialize the processing draw when the buffer is ready
 			var processing = new Processing(canvas,waveformdisplay);
 
 		},function(){
-			console.log('failed')
+			console.log('loading failed')
 		});
 	};
 request.send();
@@ -185,14 +209,15 @@ function grainsdisplay(p){
 		mouseState = true;
 		
 		if(mouseState){
-			var v = new voice(p);
-			voices[0] = v; //have in the array
+			var v = new voice();
+			v.playmouse(p);
+			voicesmono[0] = v; //have in the array
 		}
 	}).mouseup(function(){
 		mouseState = false;
-		for(var i = 0; i < voices.length;i++){
-			voices[i].stop();
-			voices.splice(i);
+		for(var i = 0; i < voicesmono.length;i++){
+			voicesmono[i].stop();
+			voicesmono.splice(i);
 		}
 	}).mousemove(function(){
 		X = p.mouseX;
@@ -206,25 +231,42 @@ function grainsdisplay(p){
 	//touch events
 	var canvas2 = document.getElementById('canvas2');
 	canvas2.addEventListener('touchstart',function(event){
+		
 		event.preventDefault();
+
+		for(var i = 0; i < event.touches.length; i++){
+			var id = event.touches[i].identifier;
+			var v = new voice(id);
+			v.playtouch(p);
+			voices.push(v);
+
+		}
 
 		
 	});
 
 	canvas2.addEventListener('touchend',function(event){
-		event.preventDefault();
-
 		
+		for(var i = 0; i < voices.length; i++){
+
+			for(var j = 0; j < event.changedTouches.length;j++){
+
+				if(voices[i].touchid === event.changedTouches[j].identifier){
+
+					voices[i].stop();
+					voices.splice(i);
+
+				}
+			}
+		}	
 		
 	});
 
 	canvas2.addEventListener('touchmove',function(event){
 		event.preventDefault();
 		
-		
 	});
 
-	
 	//draw
 	p.draw = function(){
 
