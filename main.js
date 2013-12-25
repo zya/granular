@@ -5,6 +5,7 @@ var graincount = 0; // to iterate in the array with setInterval
 var w,h;
 var data;
 var drawingdata = []; //an array that keeps the data
+var voices = []; //an array for touch events
 var isloaded = false;
 var X = 0;
 var Y = 0;
@@ -15,25 +16,29 @@ var v;
 //the grain class
 function grain(buffer,position){
 
-	this.now = context.currentTime;
+	var that = this; //for scope issues
+	this.now = context.currentTime; //update the time value
+	//create the source
 	this.source = context.createBufferSource();
 	this.source.buffer = buffer;
+	//create the gain for enveloping
 	this.gain = context.createGain();
 	this.gain.connect(context.destination);
-	var that = this;
+	
 	//connections
 	this.source.connect(this.gain);
 	this.gain.connect(context.destination);
 	
+	//update the position and calcuate the offset
 	this.position = position;
-	this.offset = this.position * (buffer.duration / w);
+	this.offset = this.position * (buffer.duration / w); //pixels to seconds
 	
 	//envelope
 	this.source.start(this.now,this.offset + (Math.random() * 0.3),1.2); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
-
 	this.gain.gain.linearRampToValueAtTime(0.5,this.now + 0.08);
 	this.gain.gain.linearRampToValueAtTime(0,this.now + 1);
+	
 	//garbage collection
 	this.source.stop(this.now + 1.2); 
 	setTimeout(function(){
@@ -43,24 +48,29 @@ function grain(buffer,position){
 }
 
 //the voice class
-function voice(position){
-
-	this.interval = setInterval(function(){
-		var g = new grain(buffer,X);
-
+function voice(p){
+	
+	var that = this; //for scope issues
+	this.play = function(){
+		//create new grain
+		var g = new grain(buffer,p.mouseX);
+		//push to the array
 		grains[graincount] = g;
 		graincount+=1;
 				
 		if(graincount > 20){
 			graincount = 0;
 		}
-
-	},50);
-			
+		//next interval
+		that.timeout = setTimeout(that.play,50);
+	}
+	this.play();
+		
 }
 
+//stop method
 voice.prototype.stop = function(){
-	clearInterval(this.interval);
+	clearTimeout(this.timeout)
 }
 
 //loading the sound with XML HTTP REQUEST
@@ -138,7 +148,8 @@ function waveformdisplay(p){
 
 	
 }
-//processing - grain display
+
+//processing - grain display and main interaction system
 function grainsdisplay(p){
 	w = parseInt($('#waveform').css('width'),10);
 	h = parseInt($('#waveform').css('height'),10);
@@ -148,7 +159,7 @@ function grainsdisplay(p){
 		p.size(w,h);
 		p.background(0,0);//backgorund black alpha 0
 		p.frameRate(24);
-		p.noLoop();
+		//p.noLoop();
 		//change the size on resize
 		$(window).resize(function(){
 			w = parseInt($('#waveform').css('width'),10);
@@ -158,24 +169,22 @@ function grainsdisplay(p){
 		});	
 		
 	};
-
-	p.mouseMoved = function(){
-		//mouse move event
-		X = p.mouseX;
-		Y = p.mouseY;
-	};
-
+	//mouse events
 	p.mousePressed = function(){
 		mouseState = true;
 
 		if(mouseState){
-			v = new voice(X);
+			v = new voice(p);
+			v[0] = v; //have in the array
 		}
 	};
 
-	p.mouseDragged = function(){
-
+	p.mouseMoved = function(){
+		//mouse move event
+		X = p.mouseX;
+		Y = p.mouseY;		
 	};
+
 
 	p.mouseReleased = function(){
 		mouseState = false;
@@ -186,11 +195,11 @@ function grainsdisplay(p){
 	p.draw = function(){
 
 	};
-
 	
 }
 
 
+//onload
 $(document).ready(function(){
 	var canvas = document.getElementById('canvas');
 
