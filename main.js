@@ -4,8 +4,7 @@ var grains = []; //array for the grains for memory management
 var graincount = 0; // to iterate in the array with setInterval
 var w,h;
 var data;
-var bufferready = false;
-var datawidth = [];
+var drawingdata = []; //an array that keeps the data
 
 //the grain class
 function grain(buffer){
@@ -55,7 +54,7 @@ var request = new XMLHttpRequest();
 		context.decodeAudioData(request.response,function(b){
 			buffer = b; //set the buffer
 			data = buffer.getChannelData(0);
-			bufferready = true;
+			
 
 		});
 	};
