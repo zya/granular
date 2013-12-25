@@ -5,6 +5,7 @@ var graincount = 0; // to iterate in the array with setInterval
 var w,h;
 var data;
 var drawingdata = []; //an array that keeps the data
+var isloaded = false;
 
 //the grain class
 function grain(buffer){
@@ -54,6 +55,7 @@ var request = new XMLHttpRequest();
 		context.decodeAudioData(request.response,function(b){
 			buffer = b; //set the buffer
 			data = buffer.getChannelData(0);
+			isloaded = true;
 			
 
 		});
@@ -65,10 +67,35 @@ request.send();
 function sketch(p){
 	w = parseInt($('#waveform').css('width'),10);
 	h = parseInt($('#waveform').css('height'),10);
+
+	function drawBuffer() {
+	    var step = Math.ceil( data.length / w );
+	    var amp = h / 2;
+	    
+	    for( var i=0; i < w; i++ ){
+	        var min = 1.0;
+	        var max = -1.0;
+	        
+	        for( j=0; j<step; j++) {
+	            
+	            var datum = data[(i*step)+j]; 
+	            if (datum < min){
+	            	min = datum;
+	            }else if(datum > max){
+	            	max = datum;
+	            }
+	                
+	                
+	        }
+	        p.fill(p.color(p.random(255),p.random(255),p.random(255)));
+	       	p.rect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
+	    }
+    
+	}
 	
 	p.setup = function(){
 		p.size(w,h);
-		p.background(0);
+		//p.background(0);
 		p.frameRate(24);
 		
 		//change the size on resize
@@ -82,7 +109,12 @@ function sketch(p){
 	};
 
 	p.draw = function(){
-		//p.background(255);
+		//p.background(0);
+		
+		if(isloaded){
+			drawBuffer();
+		}
+		
 		
 	};
 }
