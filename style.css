@@ -23,7 +23,7 @@ body{
 	height: 50%;
 	padding: 0;
 	margin: 0;
-	text-align: center;
+	//text-align: center;
 
 }
 #controls{
@@ -32,10 +32,17 @@ body{
 	height: 40%;
 	padding: 0;
 	margin: 0;
+
 }
 
 #canvas{
 	//border: white 1px solid;
+	position: absolute;
+	
+}
+#canvas2{
+	position: absolute;
+	
 }
 
 #drop{
@@ -47,6 +54,7 @@ body{
 	text-align: center;
 	color: white;
 	font-family: 'Julius Sans One', sans-serif;
+	visibility: hidden;
 	
 
 }
