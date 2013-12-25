@@ -178,42 +178,42 @@ function grainsdisplay(p){
 		});	
 		
 	};
-	//mouse events
-	p.mousePressed = function(){
-		mouseState = true;
+	
 
+	//mouse events
+	$('#canvas2').mousedown(function(){
+		mouseState = true;
+		
 		if(mouseState){
 			var v = new voice(p);
 			voices[0] = v; //have in the array
 		}
-	};
-
-
-	p.mouseMoved = function(){
-		//mouse move event
-		X = p.mouseX;
-		Y = p.mouseY;		
-	};
-
-
-	p.mouseReleased = function(){
+	}).mouseup(function(){
 		mouseState = false;
 		for(var i = 0; i < voices.length;i++){
 			voices[i].stop();
 			voices.splice(i);
 		}
-		
-	};
+	}).mousemove(function(){
+		X = p.mouseX;
+		Y = p.mouseY;	
+	});
+
+
+
+	
 
 	//touch events
 	var canvas2 = document.getElementById('canvas2');
 	canvas2.addEventListener('touchstart',function(event){
 		event.preventDefault();
+
 		
 	});
 
 	canvas2.addEventListener('touchend',function(event){
 		event.preventDefault();
+
 		
 		
 	});
