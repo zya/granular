@@ -1,4 +1,5 @@
-var context = new webkitAudioContext();
+window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext;
+var context = new AudioContext();
 var buffer;
 var grains = []; //array for the grains for memory management
 var graincount = 0; // to iterate in the array with setInterval
@@ -14,7 +15,7 @@ var v;
 
 
 //the grain class
-function grain(buffer,position){
+function grain(p,buffer,positionx,positiony){
 
 	var that = this; //for scope issues
 	this.now = context.currentTime; //update the time value
@@ -30,14 +31,20 @@ function grain(buffer,position){
 	this.gain.connect(context.destination);
 	
 	//update the position and calcuate the offset
-	this.position = position;
-	this.offset = this.position * (buffer.duration / w); //pixels to seconds
+	this.positionx = positionx;
+	this.offset = this.positionx * (buffer.duration / w); //pixels to seconds
+
+	//update and calculate the amplitude
+	this.positiony = positiony;
+	this.amp = this.positiony / h;
+	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.7;
+	
 	
 	//envelope
-	this.source.start(this.now,this.offset + (Math.random() * 0.3),1.2); //parameters (when,offset,duration)
+	this.source.start(this.now,this.offset + (Math.random() * 0.2),1.2); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
-	this.gain.gain.linearRampToValueAtTime(0.5,this.now + 0.08);
-	this.gain.gain.linearRampToValueAtTime(0,this.now + 1);
+	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + 0.08);
+	this.gain.gain.linearRampToValueAtTime(0,this.now + 0.2);
 	
 	//garbage collection
 	this.source.stop(this.now + 1.2); 
@@ -53,7 +60,7 @@ function voice(p){
 	var that = this; //for scope issues
 	this.play = function(){
 		//create new grain
-		var g = new grain(buffer,p.mouseX);
+		var g = new grain(p,buffer,p.mouseX,p.mouseY);
 		//push to the array
 		grains[graincount] = g;
 		graincount+=1;
@@ -87,6 +94,8 @@ var request = new XMLHttpRequest();
 			//initialize the processing draw when the buffer is ready
 			var processing = new Processing(canvas,waveformdisplay);
 
+		},function(){
+			console.log('failed')
 		});
 	};
 request.send();
@@ -179,6 +188,7 @@ function grainsdisplay(p){
 		}
 	};
 
+
 	p.mouseMoved = function(){
 		//mouse move event
 		X = p.mouseX;
@@ -190,6 +200,12 @@ function grainsdisplay(p){
 		mouseState = false;
 		v.stop();
 	};
+
+	//touch events
+	var canvas2 = document.getElementById('canvas2');
+	canvas2.addEventListener('touchstart',function(event){
+		console.log(event);
+	});
 	
 	//draw
 	p.draw = function(){
