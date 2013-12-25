@@ -24,6 +24,11 @@ body{
 	padding: 0;
 	margin: 0;
 	//text-align: center;
+	-moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 
 }
 #controls{
@@ -38,10 +43,20 @@ body{
 #canvas{
 	//border: white 1px solid;
 	position: absolute;
+	-moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 	
 }
 #canvas2{
 	position: absolute;
+	-moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 	
 }
 
