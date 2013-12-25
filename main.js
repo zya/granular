@@ -11,7 +11,7 @@ var isloaded = false;
 var X = 0;
 var Y = 0;
 var mouseState = false;
-var v;
+
 
 
 //the grain class
@@ -41,7 +41,7 @@ function grain(p,buffer,positionx,positiony){
 	
 	
 	//envelope
-	this.source.start(this.now,this.offset + (Math.random() * 0.2),1.2); //parameters (when,offset,duration)
+	this.source.start(this.now,this.offset + (Math.random() * 0.4),1.2); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
 	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + 0.08);
 	this.gain.gain.linearRampToValueAtTime(0,this.now + 0.2);
@@ -69,7 +69,7 @@ function voice(p){
 			graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,50);
+		that.timeout = setTimeout(that.play,100);
 	}
 	this.play();
 		
@@ -183,8 +183,8 @@ function grainsdisplay(p){
 		mouseState = true;
 
 		if(mouseState){
-			v = new voice(p);
-			v[0] = v; //have in the array
+			var v = new voice(p);
+			voices[0] = v; //have in the array
 		}
 	};
 
@@ -198,14 +198,32 @@ function grainsdisplay(p){
 
 	p.mouseReleased = function(){
 		mouseState = false;
-		v.stop();
+		for(var i = 0; i < voices.length;i++){
+			voices[i].stop();
+			voices.splice(i);
+		}
+		
 	};
 
 	//touch events
 	var canvas2 = document.getElementById('canvas2');
 	canvas2.addEventListener('touchstart',function(event){
-		console.log(event);
+		event.preventDefault();
+		
 	});
+
+	canvas2.addEventListener('touchend',function(event){
+		event.preventDefault();
+		
+		
+	});
+
+	canvas2.addEventListener('touchmove',function(event){
+		event.preventDefault();
+		
+		
+	});
+
 	
 	//draw
 	p.draw = function(){
