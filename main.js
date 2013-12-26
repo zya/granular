@@ -37,11 +37,13 @@ function grain(p,buffer,positionx,positiony){
 	//update and calculate the amplitude
 	this.positiony = positiony;
 	this.amp = this.positiony / h;
-	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.4;
+	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.3;
 	
 	
 	//envelope
-	this.source.start(this.now,this.offset + (Math.random() * 0.4),1.2); //parameters (when,offset,duration)
+	this.randomoffset = (Math.random() * 0.2) - 0.1; //in seconds
+
+	this.source.start(this.now,this.offset + this.randomoffset,1.2); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
 	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + 0.08);
 	this.gain.gain.linearRampToValueAtTime(0,this.now + 0.2);
@@ -51,6 +53,21 @@ function grain(p,buffer,positionx,positiony){
 	setTimeout(function(){
 		that.gain.disconnect();
 	},500);
+
+	//drawing the lines
+	
+	p.stroke(p.random(255),p.random(255),p.random(255)); //,(this.amp + 0.8) * 255
+	//p.strokeWeight(this.amp * 5);
+	this.randomoffsetinpixels = this.randomoffset / (buffer.duration / w);
+	//p.background();
+	p.line(this.positionx + this.randomoffsetinpixels,0,this.positionx + this.randomoffsetinpixels,p.height);
+	setTimeout(function(){
+
+		p.background();
+		p.line(that.positionx + that.randomoffsetinpixels,0,that.positionx + that.randomoffsetinpixels,p.height);
+
+	},200);
+
 	
 }
 
@@ -63,20 +80,21 @@ function voice(id){
 
 //play function for mouse event
 voice.prototype.playmouse = function(p){
-	
+	this.grains = [];
+	this.grainscount = 0;
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
 		var g = new grain(p,buffer,p.mouseX,p.mouseY);
 		//push to the array
-		grains[graincount] = g;
-		graincount+=1;
+		that.grains[that.graincount] = g;
+		that.graincount+=1;
 				
-		if(graincount > 20){
-			graincount = 0;
+		if(that.graincount > 20){
+			that.graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,150);
+		that.timeout = setTimeout(that.play,50);
 	}
 	this.play();
 }
@@ -157,7 +175,7 @@ function waveformdisplay(p){
 	                
 	                
 	        }
-	        
+	        //p.stroke(p.random(255),p.random(255),p.random(255));
 	       	p.rect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
 	    }
     
@@ -227,6 +245,9 @@ function grainsdisplay(p){
 			voicesmono[i].stop();
 			voicesmono.splice(i);
 		}
+		setTimeout(function(){
+			p.background();
+		},300);
 	}).mousemove(function(){
 		X = p.mouseX;
 		Y = p.mouseY;	
@@ -279,11 +300,15 @@ function grainsdisplay(p){
 		}	
 		
 		//safety and garbage collection
-		if(event.touches.length === 0){
+		if(event.touches.length < 1){
 			for(var i = 0; i < voices.length; i++){
 				voices[i].stop();
 			}
 			voices = [];
+			setTimeout(function(){
+				p.background();
+				console.log('test');
+			},200);
 		}
 		
 		
