@@ -1,8 +1,7 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext;
 var context = new AudioContext();
 var buffer;
-var grains = []; //array for the grains for memory management
-var graincount = 0; // to iterate in the array with setInterval
+
 var w,h;
 var data;
 var drawingdata = []; //an array that keeps the data
@@ -12,8 +11,6 @@ var isloaded = false;
 var X = 0;
 var Y = 0;
 var mouseState = false;
-
-
 
 
 //the grain class
@@ -40,7 +37,7 @@ function grain(p,buffer,positionx,positiony){
 	//update and calculate the amplitude
 	this.positiony = positiony;
 	this.amp = this.positiony / h;
-	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.5;
+	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.4;
 	
 	
 	//envelope
@@ -53,7 +50,7 @@ function grain(p,buffer,positionx,positiony){
 	this.source.stop(this.now + 1.2); 
 	setTimeout(function(){
 		that.gain.disconnect();
-	},1200);
+	},500);
 	
 }
 
@@ -88,18 +85,21 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 	//this.positiony = positiony;
 	this.positionx = positionx;
 	this.positiony = positiony;
+		this.grains = [];
+		this.graincount = 0;
+
 	
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
 		var g = new grain(p,buffer,that.positionx,that.positiony);
-		
+
 		//push to the array
-		grains[graincount] = g;
-		graincount+=1;
+		that.grains[that.graincount] = g;
+		that.graincount+=1;
 				
-		if(graincount > 400){
-			graincount = 0;
+		if(that.graincount > 50){
+			that.graincount = 0;
 		}
 		//next interval
 		that.timeout = setTimeout(that.play,150);
@@ -242,16 +242,16 @@ function grainsdisplay(p){
 		
 		event.preventDefault();
 		
-		//5 touches glitches on ipad
-		if(event.touches.length < 5){
+		//4 touches glitches on ipad
+		if(event.touches.length < 4){
 
 			for(var i = 0; i < event.touches.length; i++){
 			
 				var id = event.touches[i].identifier;
 				var v = new voice(id);
 				var clientX = event.touches[i].clientX;
-				var clientY = event.touches[i].clientX;
-				v.playtouch(p,clientX,clientY); // position x added
+				var clientY = event.touches[i].clientY;
+				v.playtouch(p,clientX,clientY); // position x and y added
 				
 				voices.push(v);
 
