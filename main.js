@@ -86,7 +86,7 @@ voice.prototype.playtouch = function(p){
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
-		var g = new grain(p,buffer,p.mouseX,p.mouseY);
+		var g = new grain(p,buffer,p.width/2,p.height/2);
 		//push to the array
 		grains[graincount] = g;
 		graincount+=1;
