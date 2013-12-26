@@ -132,7 +132,7 @@ voice.prototype.stop = function(){
 
 //loading the sound with XML HTTP REQUEST
 var request = new XMLHttpRequest();
-	request.open('GET','2.mp3',true);
+	request.open('GET','audio/guitar.mp3',true);
 	request.responseType = "arraybuffer";
 	request.onload = function(){
 		context.decodeAudioData(request.response,function(b){
@@ -332,9 +332,7 @@ function grainsdisplay(p){
 			}
 		}
 		
-
-
-		
+	
 	});
 
 	//draw
