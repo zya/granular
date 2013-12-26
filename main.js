@@ -35,11 +35,12 @@ function grain(p,buffer,positionx,positiony){
 	//update the position and calcuate the offset
 	this.positionx = positionx;
 	this.offset = this.positionx * (buffer.duration / w); //pixels to seconds
+	
 
 	//update and calculate the amplitude
 	this.positiony = positiony;
 	this.amp = this.positiony / h;
-	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.7;
+	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.5;
 	
 	
 	//envelope
@@ -65,6 +66,7 @@ function voice(id){
 
 //play function for mouse event
 voice.prototype.playmouse = function(p){
+	
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
@@ -77,25 +79,30 @@ voice.prototype.playmouse = function(p){
 			graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,100);
+		that.timeout = setTimeout(that.play,150);
 	}
 	this.play();
 }
 //play function for touch events - this will get the position from touch events
-voice.prototype.playtouch = function(p){
+voice.prototype.playtouch = function(p,positionx,positiony){
+	//this.positiony = positiony;
+	this.positionx = positionx;
+	this.positiony = positiony;
+	
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
-		var g = new grain(p,buffer,p.width/2,p.height/2);
+		var g = new grain(p,buffer,that.positionx,that.positiony);
+		
 		//push to the array
 		grains[graincount] = g;
 		graincount+=1;
 				
-		if(graincount > 20){
+		if(graincount > 400){
 			graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,100);
+		that.timeout = setTimeout(that.play,150);
 	}
 	this.play();
 }
@@ -192,7 +199,8 @@ function grainsdisplay(p){
 		p.size(w,h);
 		p.background(0,0);//backgorund black alpha 0
 		p.frameRate(24);
-		//p.noLoop();
+		p.noLoop();
+		
 		//change the size on resize
 		$(window).resize(function(){
 			w = parseInt($('#waveform').css('width'),10);
@@ -233,14 +241,23 @@ function grainsdisplay(p){
 	canvas2.addEventListener('touchstart',function(event){
 		
 		event.preventDefault();
+		
+		//5 touches glitches on ipad
+		if(event.touches.length < 5){
 
-		for(var i = 0; i < event.touches.length; i++){
-			var id = event.touches[i].identifier;
-			var v = new voice(id);
-			v.playtouch(p);
-			voices.push(v);
+			for(var i = 0; i < event.touches.length; i++){
+			
+				var id = event.touches[i].identifier;
+				var v = new voice(id);
+				var clientX = event.touches[i].clientX;
+				var clientY = event.touches[i].clientX;
+				v.playtouch(p,clientX,clientY); // position x added
+				
+				voices.push(v);
 
+			}
 		}
+		
 
 		
 	});
@@ -248,22 +265,49 @@ function grainsdisplay(p){
 	canvas2.addEventListener('touchend',function(event){
 		
 		for(var i = 0; i < voices.length; i++){
-
+			
 			for(var j = 0; j < event.changedTouches.length;j++){
 
 				if(voices[i].touchid === event.changedTouches[j].identifier){
-
+					
 					voices[i].stop();
-					voices.splice(i);
+					
 
 				}
 			}
 		}	
 		
+		//safety and garbage collection
+		if(event.touches.length === 0){
+			for(var i = 0; i < voices.length; i++){
+				voices[i].stop();
+			}
+			voices = [];
+		}
+		
+		
 	});
-
+	
 	canvas2.addEventListener('touchmove',function(event){
 		event.preventDefault();
+		
+		
+		for(var i = 0; i < voices.length; i++){
+			
+			for(var j = 0; j < event.changedTouches.length;j++){
+				
+				if(voices[i].touchid === event.changedTouches[j].identifier){
+
+					voices[i].positiony = event.changedTouches[j].clientY;
+					voices[i].positionx = event.changedTouches[j].clientX;
+					
+				}
+				
+			}
+		}
+		
+
+
 		
 	});
 

@@ -8307,7 +8307,7 @@
           if (typeof p.mouseReleased === "function") p.mouseReleased()
         })
       }
-      curElement.dispatchEvent(t)
+      //curElement.dispatchEvent(t)
     });
     (function() {
       var enabled = true,
