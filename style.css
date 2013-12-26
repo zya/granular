@@ -20,7 +20,7 @@ body{
 #waveform{
 	background: black;
 	width: 100%;
-	height: 55%;
+	height: 70%;
 	padding: 0;
 	margin: 0;
 	//text-align: center;
@@ -34,7 +34,7 @@ body{
 #controls{
 	background: grey;
 	width: 100%;
-	height: 40%;
+	height: 25%;
 	padding: 0;
 	margin: 0;
 

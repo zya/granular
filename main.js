@@ -47,7 +47,7 @@ function grain(p,buffer,positionx,positiony){
 	this.gain.gain.linearRampToValueAtTime(0,this.now + 0.2);
 	
 	//garbage collection
-	this.source.stop(this.now + 1.2); 
+	this.source.stop(this.now + 0.5); 
 	setTimeout(function(){
 		that.gain.disconnect();
 	},500);
@@ -85,8 +85,8 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 	//this.positiony = positiony;
 	this.positionx = positionx;
 	this.positiony = positiony;
-		this.grains = [];
-		this.graincount = 0;
+	this.grains = [];
+	this.graincount = 0;
 
 	
 	var that = this; //for scope issues	
@@ -98,11 +98,11 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 		that.grains[that.graincount] = g;
 		that.graincount+=1;
 				
-		if(that.graincount > 50){
+		if(that.graincount > 30){
 			that.graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,150);
+		that.timeout = setTimeout(that.play,100);
 	}
 	this.play();
 }
@@ -251,6 +251,7 @@ function grainsdisplay(p){
 				var v = new voice(id);
 				var clientX = event.touches[i].clientX;
 				var clientY = event.touches[i].clientY;
+				console.log(event.touches[i].clientY);
 				v.playtouch(p,clientX,clientY); // position x and y added
 				
 				voices.push(v);
