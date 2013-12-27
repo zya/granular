@@ -350,5 +350,7 @@ $(document).ready(function(){
 	//grain display init
 	var canvas2 = document.getElementById('canvas2');
 	var processing = new Processing(canvas2,grainsdisplay);
+
+	
 	
 });
