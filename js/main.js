@@ -351,6 +351,11 @@ $(document).ready(function(){
 	var canvas2 = document.getElementById('canvas2');
 	var processing = new Processing(canvas2,grainsdisplay);
 
+	//interface.js
+	var grains = new Interface.Panel({
+		container: $('#grain')
+	});
+
 	
 	
 });
