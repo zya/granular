@@ -139,9 +139,9 @@ var request = new XMLHttpRequest();
 			buffer = b; //set the buffer
 			data = buffer.getChannelData(0);
 			isloaded = true;
-
+			var canvas1 = document.getElementById('canvas');
 			//initialize the processing draw when the buffer is ready
-			var processing = new Processing(canvas,waveformdisplay);
+			var processing = new Processing(canvas1,waveformdisplay);
 
 		},function(){
 			console.log('loading failed')
@@ -345,16 +345,11 @@ function grainsdisplay(p){
 
 //onload
 $(document).ready(function(){
-	var canvas = document.getElementById('canvas');
+	
 
 	//grain display init
 	var canvas2 = document.getElementById('canvas2');
 	var processing = new Processing(canvas2,grainsdisplay);
-
-	//interface.js
-	var grains = new Interface.Panel({
-		container: $('#grain')
-	});
 
 	
 	
