@@ -14,7 +14,7 @@ var mouseState = false;
 
 
 //the grain class
-function grain(p,buffer,positionx,positiony){
+function grain(p,buffer,positionx,positiony,attack,release,spread){
 
 	var that = this; //for scope issues
 	this.now = context.currentTime; //update the time value
@@ -37,10 +37,14 @@ function grain(p,buffer,positionx,positiony){
 	//update and calculate the amplitude
 	this.positiony = positiony;
 	this.amp = this.positiony / h;
-	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.3;
+	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 1;
 	
 	
 	//envelope
+	this.attack = attack;
+	this.release = release;
+	this.spread = spread;
+
 	this.randomoffset = (Math.random() * 0.2) - 0.1; //in seconds
 
 	this.source.start(this.now,this.offset + this.randomoffset,1.2); //parameters (when,offset,duration)
@@ -127,7 +131,7 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 
 //stop method
 voice.prototype.stop = function(){
-	clearTimeout(this.timeout)
+	clearTimeout(this.timeout);
 }
 
 //loading the sound with XML HTTP REQUEST
@@ -250,7 +254,20 @@ function grainsdisplay(p){
 		},300);
 	}).mousemove(function(){
 		X = p.mouseX;
-		Y = p.mouseY;	
+		Y = p.mouseY;
+		
+	});
+
+	$(document).mousemove(function(e){
+		if(e.target.id !== 'canvas2'){
+			for(var i = 0; i < voicesmono.length;i++){
+				voicesmono[i].stop();
+				voicesmono.splice(i);
+				setTimeout(function(){
+					p.background();
+				},300);
+			}
+		}
 	});
 
 
@@ -264,19 +281,23 @@ function grainsdisplay(p){
 		event.preventDefault();
 		
 		//4 touches glitches on ipad
+
 		if(event.touches.length < 4){
 
 			for(var i = 0; i < event.touches.length; i++){
-			
-				var id = event.touches[i].identifier;
-				var v = new voice(id);
-				var clientX = event.touches[i].clientX;
-				var clientY = event.touches[i].clientY;
-				console.log(event.touches[i].clientY);
-				v.playtouch(p,clientX,clientY); // position x and y added
 				
-				voices.push(v);
+				if(event.touches[i].target.id === 'canvas2'){
+					var id = event.touches[i].identifier;
+					var v = new voice(id);
+					var clientX = event.touches[i].clientX;
+					var clientY = event.touches[i].clientY;
+					
+					v.playtouch(p,clientX,clientY); // position x and y added
+					
+					voices.push(v);
 
+				}
+				
 			}
 		}
 		
@@ -307,7 +328,7 @@ function grainsdisplay(p){
 			voices = [];
 			setTimeout(function(){
 				p.background();
-				console.log('test');
+				
 			},200);
 		}
 		
@@ -323,9 +344,12 @@ function grainsdisplay(p){
 			for(var j = 0; j < event.changedTouches.length;j++){
 				
 				if(voices[i].touchid === event.changedTouches[j].identifier){
-
-					voices[i].positiony = event.changedTouches[j].clientY;
-					voices[i].positionx = event.changedTouches[j].clientX;
+					if(event.changedTouches[j].clientY < h + 50){
+						voices[i].positiony = event.changedTouches[j].clientY;
+						voices[i].positionx = event.changedTouches[j].clientX;	
+					}else{
+						voices[i].stop();
+					}
 					
 				}
 				
@@ -335,22 +359,20 @@ function grainsdisplay(p){
 	
 	});
 
-	//draw
-	p.draw = function(){
-
-	};
-	
 }
 
 
 //onload
 $(document).ready(function(){
 	
-
 	//grain display init
 	var canvas2 = document.getElementById('canvas2');
 	var processing = new Processing(canvas2,grainsdisplay);
 
-	
+	document.addEventListener("touchmove",function(e){
+		e.preventDefault();
+	});
+	//gui
+	guiinit();
 	
 });

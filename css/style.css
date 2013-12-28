@@ -9,6 +9,8 @@ body{
 	height: 100%;
 	padding: 0;
 	margin: 0;
+	overflow: hidden;
+	
 }
 #header{
 	background: grey;
@@ -16,6 +18,13 @@ body{
 	height: 5%;
 	padding: 0;
 	margin: 0;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 100;
+	font-size: 19px;
+	color: white;
+	padding-top: 0.5%;
+	-webkit-font-smoothing: antialiased;
 }
 #waveform{
 	background: black;
@@ -37,6 +46,10 @@ body{
 	height: 25%;
 	padding: 0;
 	margin: 0;
+	padding-top: 1.5%;
+	text-align: center;
+	
+
 
 }
 
@@ -73,5 +86,18 @@ body{
 	visibility: hidden;
 	
 }
+
+.label{
+	font-size: 17px;
+	//color: red;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-weight: 300;
+}
+
+
+
+
 
 
