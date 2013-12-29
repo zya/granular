@@ -2,6 +2,11 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext || window
 var context = new AudioContext();
 var buffer;
 
+//master nodes
+var master = context.createGain();
+master.connect(context.destination);
+
+
 var w,h;
 var data;
 var drawingdata = []; //an array that keeps the data
@@ -19,6 +24,7 @@ var density = 0.85;
 var spread = 0.2;
 var reverb = 0.5;
 var pan = 0.1;
+var trans = 1;
 
 
 //the grain class
@@ -28,6 +34,7 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	this.now = context.currentTime; //update the time value
 	//create the source
 	this.source = context.createBufferSource();
+	this.source.playbackRate.value = this.source.playbackRate.value * trans;
 	this.source.buffer = buffer;
 	//create the gain for enveloping
 	this.gain = context.createGain();
@@ -51,7 +58,7 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	
 	
 	
-	this.gain.connect(context.destination);
+	this.gain.connect(master);
 	
 	//update the position and calcuate the offset
 	this.positionx = positionx;
@@ -191,6 +198,10 @@ var request = new XMLHttpRequest();
 		});
 	};
 request.send();
+
+
+
+
 
 
 //processing - waveform display - canvas 

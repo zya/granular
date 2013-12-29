@@ -77,7 +77,44 @@ function guiinit(){
 			
 		}
 	});
-	$('#reverb').knob(settings);
+	
+	$('#minus').click(function(){
+		trans = trans * 0.5;
+		$('#minus').css('opacity',0.3);
+		setTimeout(function(){
+			$('#minus').css('opacity',1);
+		},200);
+	});
+
+	$('#plus').click(function(){
+		trans = trans * 2;
+		$('#plus').css('opacity',0.3);
+		setTimeout(function(){
+			$('#plus').css('opacity',1);
+		},200);
+	});
+
+	var minus = document.getElementById('minus');
+	minus.addEventListener('touchstart',function(e){
+		e.preventDefault();
+		$('#minus').css('opacity',0.3);
+		trans = trans * 0.5;
+	});
+	minus.addEventListener('touchend',function(e){
+		e.preventDefault();
+		$('#minus').css('opacity',1);
+	});
+
+	var plus = document.getElementById('plus');
+	minus.addEventListener('touchstart',function(e){
+		e.preventDefault();
+		$('#plus').css('opacity',0.3);
+		trans = trans * 2;
+	});
+	minus.addEventListener('touchend',function(e){
+		e.preventDefault();
+		$('#plus').css('opacity',1);
+	});
 	
 
 }
