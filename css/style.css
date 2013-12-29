@@ -21,9 +21,9 @@ body{
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 100;
-	font-size: 19px;
+	font-size: 13px;
 	color: white;
-	padding-top: 0.5%;
+	padding-top: 0.2%;
 	-webkit-font-smoothing: antialiased;
 }
 #waveform{

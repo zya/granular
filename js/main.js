@@ -12,6 +12,14 @@ var X = 0;
 var Y = 0;
 var mouseState = false;
 
+//settings
+var attack = 0.40;
+var release = 0.40;
+var density = 0.85;
+var spread = 0.2;
+var reverb = 0.5;
+var pan = 0.5;
+
 
 //the grain class
 function grain(p,buffer,positionx,positiony,attack,release,spread){
@@ -37,26 +45,31 @@ function grain(p,buffer,positionx,positiony,attack,release,spread){
 	//update and calculate the amplitude
 	this.positiony = positiony;
 	this.amp = this.positiony / h;
-	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 1;
+	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.7;
 	
 	
 	//envelope
-	this.attack = attack;
-	this.release = release;
+	this.attack = attack * 0.4;
+	this.release = release * 1.5;
+	if(this.release < 0){
+		this.release = 0.1;
+	}
 	this.spread = spread;
 
-	this.randomoffset = (Math.random() * 0.2) - 0.1; //in seconds
+	this.randomoffset = (Math.random() * spread) - (spread / 2); //in seconds
 
-	this.source.start(this.now,this.offset + this.randomoffset,1.2); //parameters (when,offset,duration)
+	this.source.start(this.now,this.offset + this.randomoffset,this.attack + this.release); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
-	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + 0.08);
-	this.gain.gain.linearRampToValueAtTime(0,this.now + 0.2);
+	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + this.attack);
+	this.gain.gain.linearRampToValueAtTime(0,this.now + (this.attack +  this.release) );
 	
 	//garbage collection
-	this.source.stop(this.now + 0.5); 
+	this.source.stop(this.now + this.attack + this.release + 0.1); 
+	
+	var tms = (this.attack + this.release) * 1000;
 	setTimeout(function(){
 		that.gain.disconnect();
-	},500);
+	},tms + 200);
 
 	//drawing the lines
 	
@@ -89,7 +102,7 @@ voice.prototype.playmouse = function(p){
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
-		var g = new grain(p,buffer,p.mouseX,p.mouseY);
+		var g = new grain(p,buffer,p.mouseX,p.mouseY,attack,release,spread);
 		//push to the array
 		that.grains[that.graincount] = g;
 		that.graincount+=1;
@@ -98,7 +111,10 @@ voice.prototype.playmouse = function(p){
 			that.graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,50);
+		this.dens = p.map(density,1,0,0,1);
+		this.interval = (this.dens * 500) + 70;
+		that.timeout = setTimeout(that.play,this.interval);
+		
 	}
 	this.play();
 }
@@ -114,7 +130,7 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
-		var g = new grain(p,buffer,that.positionx,that.positiony);
+		var g = new grain(p,buffer,that.positionx,that.positiony,attack,release,spread);
 
 		//push to the array
 		that.grains[that.graincount] = g;
@@ -124,7 +140,9 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 			that.graincount = 0;
 		}
 		//next interval
-		that.timeout = setTimeout(that.play,100);
+		this.dens = p.map(density,1,0,0,1);
+		this.interval = (this.dens * 500) + 70;
+		that.timeout = setTimeout( that.play, this.interval );
 	}
 	this.play();
 }
@@ -278,11 +296,11 @@ function grainsdisplay(p){
 	var canvas2 = document.getElementById('canvas2');
 	canvas2.addEventListener('touchstart',function(event){
 		
-		event.preventDefault();
+		event.preventDefault(); //to prevent scrolling
 		
 		//4 touches glitches on ipad
-
 		if(event.touches.length < 4){
+
 
 			for(var i = 0; i < event.touches.length; i++){
 				
@@ -292,7 +310,17 @@ function grainsdisplay(p){
 					var clientX = event.touches[i].clientX;
 					var clientY = event.touches[i].clientY;
 					
-					v.playtouch(p,clientX,clientY); // position x and y added
+					//multitouch optimization
+					var interval;
+					//calculate the reverse interval
+					if(event.touches.length > 1){
+						interval = p.map(density,0,1,1,0.7);
+					}else{
+						interval = p.map(density,0,1,1,0);
+					}
+					 
+					//play
+					v.playtouch(p,clientX,clientY,interval);
 					
 					voices.push(v);
 
@@ -315,7 +343,6 @@ function grainsdisplay(p){
 					
 					voices[i].stop();
 					
-
 				}
 			}
 		}	
