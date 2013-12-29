@@ -18,11 +18,11 @@ var release = 0.40;
 var density = 0.85;
 var spread = 0.2;
 var reverb = 0.5;
-var pan = 0.5;
+var pan = 0.1;
 
 
 //the grain class
-function grain(p,buffer,positionx,positiony,attack,release,spread){
+function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 
 	var that = this; //for scope issues
 	this.now = context.currentTime; //update the time value
@@ -31,10 +31,26 @@ function grain(p,buffer,positionx,positiony,attack,release,spread){
 	this.source.buffer = buffer;
 	//create the gain for enveloping
 	this.gain = context.createGain();
-	this.gain.connect(context.destination);
 	
-	//connections
-	this.source.connect(this.gain);
+	//experimenting with adding a panner node - not all the grains will be panned for better performance
+	var yes = parseInt(p.random(3),10);
+	
+	if( yes === 1){
+		this.panner = context.createPanner();
+		this.panner.panningModel = "equalpower";
+		this.panner.distanceModel = "linear";
+		this.panner.setPosition(p.random(pan * -1,pan),0,0);
+		//connections
+		this.source.connect(this.panner);
+		this.panner.connect(this.gain);
+	}else{
+		this.source.connect(this.gain);
+	}
+	
+	
+	
+	
+	
 	this.gain.connect(context.destination);
 	
 	//update the position and calcuate the offset
@@ -69,6 +85,9 @@ function grain(p,buffer,positionx,positiony,attack,release,spread){
 	var tms = (this.attack + this.release) * 1000;
 	setTimeout(function(){
 		that.gain.disconnect();
+		if(yes === 1){
+			that.panner.disconnect();
+		}
 	},tms + 200);
 
 	//drawing the lines
@@ -88,6 +107,8 @@ function grain(p,buffer,positionx,positiony,attack,release,spread){
 	
 }
 
+
+
 //the voice class
 function voice(id){
 	
@@ -102,7 +123,7 @@ voice.prototype.playmouse = function(p){
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
-		var g = new grain(p,buffer,p.mouseX,p.mouseY,attack,release,spread);
+		var g = new grain(p,buffer,p.mouseX,p.mouseY,attack,release,spread,pan);
 		//push to the array
 		that.grains[that.graincount] = g;
 		that.graincount+=1;
@@ -130,7 +151,7 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
-		var g = new grain(p,buffer,that.positionx,that.positiony,attack,release,spread);
+		var g = new grain(p,buffer,that.positionx,that.positiony,attack,release,spread,pan);
 
 		//push to the array
 		that.grains[that.graincount] = g;

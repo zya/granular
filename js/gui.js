@@ -63,7 +63,21 @@ function guiinit(){
 			
 		}
 	});
+	$('#pan').knob({
+		'min':0,
+		'max':200,
+		'width' : dialwidth,
+		"displayInput" :  false,
+		"val": 50,
+		"angleArc" : 180,
+		"angleOffset" : -90,
+		"change": function(v){
+			pan = v / 100;
+
+			
+		}
+	});
 	$('#reverb').knob(settings);
-	$('#pan').knob(settings);
+	
 
 }
