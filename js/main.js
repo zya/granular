@@ -429,7 +429,7 @@ function grainsdisplay(p){
 
 //onload
 $(document).ready(function(){
-	
+	window.history.pushState(null,null,'');
 	//grain display init
 	var canvas2 = document.getElementById('canvas2');
 	var processing = new Processing(canvas2,grainsdisplay);

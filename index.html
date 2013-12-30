@@ -36,10 +36,10 @@
 			<canvas id='canvas2'></canvas>
 			<div id='help'>
 				<br>
-				<div class='row' id='x'><span class='glyphicon glyphicon-arrow-left'></span> x axis - grain position <span class='glyphicon glyphicon-arrow-right'></span><br><br><span class='glyphicon glyphicon-arrow-up'></span><br>y axis - grain amplitude<br> <span class='glyphicon glyphicon-arrow-down'></span> </div>
+				<div class='row .hidden-xs' id='x'><span class='glyphicon glyphicon-arrow-left'></span> x axis - grain position <span class='glyphicon glyphicon-arrow-right'></span><br><br><span class='glyphicon glyphicon-arrow-up'></span><br>y axis - grain amplitude<br> <span class='glyphicon glyphicon-arrow-down'></span> </div>
 				<div class='row'>
 					<div class='col-md-3 col-sm-3 col-xs-3'></div>
-					<div id='drop' class='col-md-6 col-sm-6 col-xs-6'> <br>drop an audio file here <br><br></div>
+					<div id='drop' class='col-md-6 col-sm-6 col-xs-6 hidden-xs'> <br>drop an audio file here <br><br></div>
 					<div class='col-md-3 col-sm-3 col-xs-3'></div>
 				</div><br>
 				<div class='row'>
@@ -48,10 +48,18 @@
 					<div id='sample2' class='col-md-3 col-sm-3 col-xs-3 sample'>sample file 2 - synth</div>
 					<div class='col-md-3 col-sm-3 col-xs-3'></div>
 				</div><br>
-				<div class='row' id='description'>
+				<div class='row hidden-xs' id='description'>
 					<div class='col-md-3 col-sm-3 col-xs-3'></div>
 					<div class='col-md-6 col-sm-6 col-xs-6'>
-						Description
+						<a href='http://en.wikipedia.org/wiki/Granular_synthesis'>Granular synthesis</a> is a method of sound synthesis based on splittng the audio into small pieces and playing them with a fast interval.<br>
+						After loading a sample, you can start creating grains by clicking and holding your mouse on the waveform. The X axis will determine the position and Y axis will change the amplitude of each grain.<br>
+						This app also has multi-touch support for up to three voices and real-time manupilation of settings.<br><br>
+						
+						Tested on: Google Chrome,Firefox, Safari, Chrome iOS (iPad), Safari iOS (iPad)<br>
+						Libraries used: <a href='http://www.w3.org/TR/webaudio/'>Web Audio API</a>, <a href='http://processingjs.org/'>Processing.js</a>, <a href='http://getbootstrap.com/'>Bootstrap 3</a>, <a href='http://anthonyterrien.com/knob/'>jQuery Knob</a>
+
+						<br>Performance Tip: Try using a quick attack and release as well as low density when using multi-touch for better performance.
+
 					</div>
 					<div class='col-md-3 col-sm-3 col-xs-3'></div>
 				</div>
@@ -61,35 +69,35 @@
 		</div>
 
 		<!-- controls row -->
-		<div class='row' id='controls'>
+		<div class='row' id='controls' >
 			<div class='col-md-2 col-sm-2 col-xs-2'>
-				<div class='label'>attack</div><br><br>
+				<div class='label hidden-xs'>attack</div><br><br>
 				<input type="text" class="dial" id='attack' data-min='0' data-max='100' value='40'><br><br>
 				
 			</div>
 
 			<div class='col-md-2 col-sm-2 col-xs-2'>
-				<div class='label'>release</div><br><br>
+				<div class='label hidden-xs'>release</div><br><br>
 				<input type="text" class="dial" id='release' data-min='0' data-max='100' value='40'>
 			</div>
 
 			<div class='col-md-2 col-sm-2 col-xs-2' >
-				<div class='label'>density</div><br><br>
+				<div class='label hidden-xs'>density</div><br><br>
 				<input type="text" class="dial" id='density' data-min='0' data-max='100' value='85'>
 			</div>
 
 			<div class='col-md-2 col-sm-2 col-xs-2'>
-				<div class='label'>spread</div><br><br>
+				<div class='label hidden-xs'>spread</div><br><br>
 				<input type="text" class="dial" id='spread' data-min='0' data-max='100' value='20'>
 			</div>
 
 			<div class='col-md-2 col-sm-2 col-xs-2'>
-				<div class='label'>pan</div><br><br>
+				<div class='label hidden-xs' >pan</div><br><br>
 				<input type="text" class="dial" id='pan' data-min='0' data-max='100' value='20'>
 			</div>
 
 			<div class='col-md-2 col-sm-2 col-xs-2 hidden-xs' >
-				<div class='label'>transpose</div><br><br>
+				<div class='label hidden-xs'>transpose</div><br><br>
 				<div id='transpose'>
 
 					<button id='minus' class='btn'>

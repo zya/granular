@@ -16,21 +16,21 @@ body{
 #header{
 	background: white;
 	width: 100%;
-	height: 7%;
+	height: 5%;
 	padding: 0;
 	margin: 0;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 100;
-	font-size: 1.5em;
+	font-size: 1.3em;
 	font-weight: 300;
 	color: black;
-	padding-top: 1.5vh;
+	padding-top: 1vh;
 	border-bottom: 1px solid white;
 }
 #waveform{
 	background: black;
 	width: 100%;
-	height: 70%;
+	height: 71%;
 	padding: 0;
 	margin: 0;
 	-moz-user-select: -moz-none;
@@ -92,7 +92,10 @@ body{
 	-webkit-font-smoothing: antialiased;
 	font-weight: 300;
 	color: black;
+	margin-bottom: -15px;
 }
+
+
 
 #transopse{
 	width: 100%;
@@ -141,7 +144,7 @@ body{
 
 #drop{
 	width: 50%;
-	height: 15%;
+	height: 12%;
 	border: 2px dotted white;
 	margin: auto;
 	font-size: 1.5em;
@@ -161,13 +164,14 @@ body{
 #x{
 	font-size: 0.8em;
 	color: #888888;
+	margin-bottom: -40px;
 }
 
 #description{
-	text-align: left;
+	text-align: justify;
 	margin:0;
 	padding:0;
-	font-size: 0.9em;
+	font-size: 0.85em;
 	font-weight: 100;
 }
 
