@@ -310,12 +310,11 @@ function grainsdisplay(p){
 		//4 touches glitches on ipad
 		if(event.touches.length < 4){
 
-
 			for(var i = 0; i < event.touches.length; i++){
 				
 				if(event.touches[i].target.id === 'canvas2'){
-					var id = event.touches[i].identifier;
-					var v = new voice(id);
+					var id = event.touches[i].identifier; //the id will be used for voice stop
+					var v = new voice(id); 
 					var clientX = event.touches[i].clientX;
 					var clientY = event.touches[i].clientY;
 					
@@ -330,16 +329,10 @@ function grainsdisplay(p){
 					 
 					//play
 					v.playtouch(p,clientX,clientY,interval);
-					
 					voices.push(v);
-
-				}
-				
+				}	
 			}
-		}
-		
-
-		
+		}	
 	});
 
 	canvas2.addEventListener('touchend',function(event){
@@ -385,14 +378,10 @@ function grainsdisplay(p){
 					}else{
 						voices[i].stop();
 					}
-					
 				}
-				
 			}
 		}
-	
 	});
-
 }
 
 
@@ -407,7 +396,6 @@ $(document).ready(function(){
 		e.preventDefault();
 	});
 	//gui
-
 	guiinit();
 	
 });
