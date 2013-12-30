@@ -1,12 +1,13 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext;
 var context = new AudioContext();
-var buffer,buffer2;
 
-//master nodes
+var buffer,buffer2; //global variables for sample files
+
+//master gain node
 var master = context.createGain();
 master.connect(context.destination);
 
-
+//global varuables
 var w,h;
 var data;
 var drawingdata = []; //an array that keeps the data
@@ -16,10 +17,9 @@ var isloaded = false;
 var X = 0;
 var Y = 0;
 var mouseState = false;
-
 var helpvisible = true;
 
-//settings
+//control initial settings
 var attack = 0.40;
 var release = 0.40;
 var density = 0.85;
@@ -43,7 +43,6 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	
 	//experimenting with adding a panner node - not all the grains will be panned for better performance
 	var yes = parseInt(p.random(3),10);
-	
 	if( yes === 1){
 		this.panner = context.createPanner();
 		this.panner.panningModel = "equalpower";
@@ -57,33 +56,28 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	}
 	
 	
-	
-	
-	
 	this.gain.connect(master);
 	
 	//update the position and calcuate the offset
 	this.positionx = positionx;
 	this.offset = this.positionx * (buffer.duration / w); //pixels to seconds
 	
-
 	//update and calculate the amplitude
 	this.positiony = positiony;
 	this.amp = this.positiony / h;
 	this.amp = p.map(this.amp,0.0,1.0,1.0,0.0) * 0.7;
 	
-	
-	//envelope
+	//parameters
 	this.attack = attack * 0.4;
 	this.release = release * 1.5;
+	
 	if(this.release < 0){
-		this.release = 0.1;
+		this.release = 0.1; // 0 - release causes mute for some reason
 	}
 	this.spread = spread;
 
 	this.randomoffset = (Math.random() * this.spread) - (this.spread / 2); //in seconds
-
-
+	///envelope
 	this.source.start(this.now,this.offset + this.randomoffset,this.attack + this.release); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
 	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + this.attack);
@@ -91,8 +85,7 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	
 	//garbage collection
 	this.source.stop(this.now + this.attack + this.release + 0.1); 
-	
-	var tms = (this.attack + this.release) * 1000;
+	var tms = (this.attack + this.release) * 1000; //calculate the time in miliseconds
 	setTimeout(function(){
 		that.gain.disconnect();
 		if(yes === 1){
@@ -101,29 +94,23 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	},tms + 200);
 
 	//drawing the lines
-	
 	p.stroke(p.random(125) + 125,p.random(250),p.random(250)); //,(this.amp + 0.8) * 255
 	//p.strokeWeight(this.amp * 5);
 	this.randomoffsetinpixels = this.randomoffset / (buffer.duration / w);
 	//p.background();
 	p.line(this.positionx + this.randomoffsetinpixels,0,this.positionx + this.randomoffsetinpixels,p.height);
 	setTimeout(function(){
-
 		p.background();
 		p.line(that.positionx + that.randomoffsetinpixels,0,that.positionx + that.randomoffsetinpixels,p.height);
-
 	},200);
 
-	
 }
-
 
 
 //the voice class
 function voice(id){
 	
 	this.touchid = id; //the id of the touch event 
-	
 }
 
 //play function for mouse event
@@ -157,7 +144,6 @@ voice.prototype.playtouch = function(p,positionx,positiony){
 	this.grains = [];
 	this.graincount = 0;
 
-	
 	var that = this; //for scope issues	
 	this.play = function(){
 		//create new grain
@@ -183,7 +169,7 @@ voice.prototype.stop = function(){
 	clearTimeout(this.timeout);
 }
 
-//loading the sounds with XML HTTP REQUEST
+//loading the first sound with XML HTTP REQUEST
 var request = new XMLHttpRequest();
 	request.open('GET','audio/guitar.mp3',true);
 	request.responseType = "arraybuffer";
@@ -203,16 +189,12 @@ var request = new XMLHttpRequest();
 request.send();
 
 
-
-
-
-
-
 //processing - waveform display - canvas 
 function waveformdisplay(p){
-	w = parseInt($('#waveform').css('width'),10);
-	h = parseInt($('#waveform').css('height'),10);
+	w = parseInt($('#waveform').css('width'),10); //get the width
+	h = parseInt($('#waveform').css('height'),10); //get the height
 
+	//draw the buffer
 	function drawBuffer() {
 	    var step = Math.ceil( data.length / w );
 	    var amp = h / 2;
@@ -221,7 +203,7 @@ function waveformdisplay(p){
 	    for( var i=0; i < w; i++ ){
 	        var min = 1.0;
 	        var max = -1.0;
-	        
+	     
 	        for( j=0; j<step; j++) {
 	            
 	            var datum = data[(i*step)+j]; 
@@ -230,20 +212,16 @@ function waveformdisplay(p){
 	            }else if(datum > max){
 	            	max = datum;
 	            }
-	                
-	                
+	                       
 	        }
 	        //p.stroke(p.random(255),p.random(255),p.random(255));
 	       	p.rect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
 	    }
-    
 	}
 	
 	p.setup = function(){
 		p.size(w,h);
-		
-		p.background(0);//background black
-		
+		p.background(0);//background black	
 		
 		//change the size on resize
 		$(window).resize(function(){
@@ -260,10 +238,7 @@ function waveformdisplay(p){
 		drawBuffer();
 		p.noLoop();
 
-
 	};
-	
-
 	
 }
 
@@ -313,7 +288,7 @@ function grainsdisplay(p){
 		Y = p.mouseY;
 		
 	});
-
+	//safety for when the mouse is out of the canvas
 	$(document).mousemove(function(e){
 		if(e.target.id !== 'canvas2'){
 			for(var i = 0; i < voicesmono.length;i++){
@@ -325,10 +300,6 @@ function grainsdisplay(p){
 			}
 		}
 	});
-
-
-
-	
 
 	//touch events
 	var canvas2 = document.getElementById('canvas2');
@@ -403,7 +374,6 @@ function grainsdisplay(p){
 	canvas2.addEventListener('touchmove',function(event){
 		event.preventDefault();
 		
-		
 		for(var i = 0; i < voices.length; i++){
 			
 			for(var j = 0; j < event.changedTouches.length;j++){
@@ -420,7 +390,6 @@ function grainsdisplay(p){
 				
 			}
 		}
-		
 	
 	});
 
