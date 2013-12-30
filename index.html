@@ -3,12 +3,23 @@
 <title>Web Audio Granular Synthesiser</title>
 	<head>
 		<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'/>
+		<meta property="og:title" content="Multi-Touch Granular Sampler 1.0 by ZYA" />
+		<meta property="og:site_name" content="ZYA.CC"/>
+		<meta property="og:url" content="http://www.zya.cc/granular" />
 		
 		<!-- CSS Libs -->
 		<link rel="stylesheet" href="libs/css/bootstrap.min.css">
         <link rel="stylesheet" href="libs/css/bootstrap-theme.min.css">
         <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans:100,400|Open+Sans:400,300,700,600|Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-		
+        <meta property="og:description" content="Granular synthesis is a method of sound synthesis based on splittng the audio into small pieces and playing them with a fast interval.
+						After loading a sample, you can start creating grains by clicking and holding your mouse on the waveform. The X axis will determine the position and Y axis will change the amplitude of each grain.
+						This app also has multi-touch support for up to three voices and real-time manupilation of settings.
+						
+						Tested on: Google Chrome,Firefox, Safari, Chrome iOS (iPad), Safari iOS (iPad)
+						Libraries used: Web Audio AP, Processing.js, Bootstrap 3,jQuery Knob
+
+						Performance Tip: Try using a quick attack and release as well as low density when using multi-touch for better performance." />
+		<meta property="og:image" content="http://static.tumblr.com/oczhivm/Kjmmymz3f/granular.jpg" />
 		<!-- JS Libs -->
 		<script src="libs/js/jquery-1.10.1.js"></script>
 		<script src='libs/js/jquery.knob.js'></script>
@@ -108,7 +119,6 @@
 						+12
 					</button><br><br>
 					<span class="glyphicon glyphicon-question-sign" id='helpbutton'></span>
-
 					
 				</div>
 				
@@ -116,10 +126,6 @@
 	
 		</div>
 
-
-
-
-		
 		
 	</body>
 </html>
