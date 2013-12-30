@@ -9,22 +9,21 @@ body{
 	height: 100%;
 	padding: 0;
 	margin: 0;
-	overflow: hidden;
+	
 	
 }
 #header{
-	background: black;
+	background: white;
 	width: 100%;
 	height: 7%;
 	padding: 0;
 	margin: 0;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 100;
-	font-size: 17px;
+	font-size: 1.5em;
 	font-weight: 300;
-	color: white;
-	padding-top: 10px;
-	
+	color: black;
+	padding-top: 1.5vh;
 	border-bottom: 1px solid white;
 }
 #waveform{
@@ -33,7 +32,6 @@ body{
 	height: 70%;
 	padding: 0;
 	margin: 0;
-	
 	-moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
@@ -44,15 +42,15 @@ body{
 }
 #controls{
 	border-top: 1px solid white;
-	background: black;
+	background: white;
 	width: 100%;
 	height: 23%;
 	padding: 0;
 	margin: 0;
 	padding-top: 1.5%;
 	text-align: center;
-	
-
+	z-index: 3;
+	overflow: hidden;
 
 }
 
@@ -78,26 +76,16 @@ body{
 	
 }
 
-#drop{
-	position: absolute;
-	margin-left: -20px;
-	top: 30%;
-	width: 100%;
-	font-size: 15px;
-	text-align: center;
-	color: white;
-	font-family: 'Julius Sans One', sans-serif;
-	visibility: hidden;
-	
-}
+
+
 
 .label{
-	font-size: 17px;
-	
+	font-size: 1.3em;
 	text-align: center;
 	font-family: 'Open Sans', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-weight: 300;
+	color: black;
 }
 
 #transopse{
@@ -107,27 +95,33 @@ body{
 }
 
 #plus{
-	background-color: white;
+	background-color: #2a6496;
 	width: 48%;
 	cursor: pointer;
 	float: right;
+	color: white;
 }
 #minus{
-	background-color: white;
+	background-color: #2a6496;
 	width: 48%;
 	height: 40%;
 	float: left;
 	cursor: pointer;
+	color: white;
 	
 }
 
-.help{
-	color: white;
-	font-size: 30px;
-}
 #github{
 	text-align: right;
 }
+
+
+#helpbutton{
+	font-size: 3em;
+	color:#2a6496;
+}
+
+
 
 
 

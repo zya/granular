@@ -9,6 +9,9 @@ function guiinit(){
 		"angleArc" : 180,
 		"angleOffset" : -90
 	};
+
+	var bg = '#E4E4E4';
+	var fg = '#2a6496';
 	$("#attack").knob({
 		'min':1,
 		'max':100,
@@ -17,6 +20,8 @@ function guiinit(){
 		"val": 50,
 		"angleArc" : 180,
 		"angleOffset" : -90,
+		'bgColor': bg,
+		'fgColor': fg,
 		"change": function(v){
 			attack = v / 100;
 			
@@ -31,6 +36,8 @@ function guiinit(){
 		"val": 50,
 		"angleArc" : 180,
 		"angleOffset" : -90,
+		'bgColor': bg,
+		'fgColor': fg,
 		"change": function(v){
 			release = v / 100;
 			
@@ -44,6 +51,8 @@ function guiinit(){
 		"val": 50,
 		"angleArc" : 180,
 		"angleOffset" : -90,
+		'bgColor': bg,
+		'fgColor': fg,
 		"change": function(v){
 			density = v / 100;
 			
@@ -57,6 +66,8 @@ function guiinit(){
 		"val": 50,
 		"angleArc" : 180,
 		"angleOffset" : -90,
+		'bgColor': bg,
+		'fgColor': fg,
 		"change": function(v){
 			spread = v / 100;
 
@@ -71,6 +82,8 @@ function guiinit(){
 		"val": 50,
 		"angleArc" : 180,
 		"angleOffset" : -90,
+		'bgColor': bg,
+		'fgColor': fg,
 		"change": function(v){
 			pan = v / 100;
 
@@ -114,6 +127,17 @@ function guiinit(){
 	plus.addEventListener('touchend',function(e){
 		e.preventDefault();
 		$('#plus').css('opacity',1);
+	});
+
+	$('#helpbutton').click(function(){
+		if(helpvisible){
+			$('#help').hide();
+			helpvisible = false;
+		}else{
+			$('#help').show();
+			helpvisible = true;
+		}
+		
 	});
 	
 

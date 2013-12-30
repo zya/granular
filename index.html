@@ -23,44 +23,51 @@
 	
 	
 	<body>
-		<div class='row' id='header'>
-			<div id='title' class='col-md-6 col-sm-6'>HTML5 Multi-Touch Granular Sampler- by ZYA</div>
-			<div id='github' class='col-md-6 col-sm-6'>Fork me on GitHub</div>
+
+		<div class='row hidden-xs' id='header'>
+				<div id='title' class='col-md-6 col-sm-6 col-xs-6'>Multi-Touch Granular Sampler by ZYA</div>
+				<div id='github' class='col-md-6 col-sm-6 col-xs-6'>Fork me on GitHub</div>
 		</div>
-		<div class='row' id='waveform'>
-			<div id='drop'>drop an audio file here</div>
+		
+		<!-- waveform row -->
+		<div class='row ' id='waveform'>
+			
 			<canvas id='canvas'></canvas>
 			<canvas id='canvas2'></canvas>
+			
+			</div>
 		</div>
+
+		<!-- controls row -->
 		<div class='row' id='controls'>
-			<div class='col-md-2 col-sm-2'>
+			<div class='col-md-2 col-sm-2 col-xs-2'>
 				<div class='label'>attack</div><br><br>
 				<input type="text" class="dial" id='attack' data-min='0' data-max='100' value='40'><br><br>
 				
 
 			</div>
 
-			<div class='col-md-2 col-sm-2'>
+			<div class='col-md-2 col-sm-2 col-xs-2'>
 				<div class='label'>release</div><br><br>
 				<input type="text" class="dial" id='release' data-min='0' data-max='100' value='40'>
 			</div>
 
-			<div class='col-md-2 col-sm-2'>
+			<div class='col-md-2 col-sm-2 col-xs-2' >
 				<div class='label'>density</div><br><br>
 				<input type="text" class="dial" id='density' data-min='0' data-max='100' value='85'>
 			</div>
 
-			<div class='col-md-2 col-sm-2'>
+			<div class='col-md-2 col-sm-2 col-xs-2'>
 				<div class='label'>spread</div><br><br>
 				<input type="text" class="dial" id='spread' data-min='0' data-max='100' value='20'>
 			</div>
 
-			<div class='col-md-2 col-sm-2'>
+			<div class='col-md-2 col-sm-2 col-xs-2'>
 				<div class='label'>pan</div><br><br>
 				<input type="text" class="dial" id='pan' data-min='0' data-max='100' value='20'>
 			</div>
 
-			<div class='col-md-2 col-sm-2'>
+			<div class='col-md-2 col-sm-2 col-xs-2 hidden-xs' >
 				<div class='label'>transposition</div><br><br>
 				<div id='transpose'>
 
@@ -71,18 +78,16 @@
 					<button id='plus' class='btn'>
 						+12
 					</button><br><br>
-					<div class='help'>?</div>
+					<span class="glyphicon glyphicon-question-sign" id='helpbutton'></span>
 
 					
 				</div>
 				
 			</div>
-
-			
-			
-			
-			
+	
 		</div>
+
+
 		
 		
 	</body>

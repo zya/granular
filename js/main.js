@@ -17,6 +17,8 @@ var X = 0;
 var Y = 0;
 var mouseState = false;
 
+var helpvisible = true;
+
 //settings
 var attack = 0.40;
 var release = 0.40;
@@ -99,7 +101,7 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 
 	//drawing the lines
 	
-	p.stroke(p.random(255),p.random(255),p.random(255)); //,(this.amp + 0.8) * 255
+	p.stroke(p.random(125) + 125,p.random(250),p.random(250)); //,(this.amp + 0.8) * 255
 	//p.strokeWeight(this.amp * 5);
 	this.randomoffsetinpixels = this.randomoffset / (buffer.duration / w);
 	//p.background();
@@ -237,6 +239,7 @@ function waveformdisplay(p){
 	
 	p.setup = function(){
 		p.size(w,h);
+		
 		p.background(0);//background black
 		
 		
@@ -250,6 +253,7 @@ function waveformdisplay(p){
 			drawBuffer();
 
 		});
+		p.strokeWeight(0.01);
 		p.stroke(255);
 		drawBuffer();
 		p.noLoop();
@@ -432,6 +436,7 @@ $(document).ready(function(){
 		e.preventDefault();
 	});
 	//gui
+
 	guiinit();
 	
 });
