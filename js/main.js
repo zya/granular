@@ -1,6 +1,6 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext;
 var context = new AudioContext();
-var buffer;
+var buffer,buffer2;
 
 //master nodes
 var master = context.createGain();
@@ -81,7 +81,8 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 	}
 	this.spread = spread;
 
-	this.randomoffset = (Math.random() * spread) - (spread / 2); //in seconds
+	this.randomoffset = (Math.random() * this.spread) - (this.spread / 2); //in seconds
+
 
 	this.source.start(this.now,this.offset + this.randomoffset,this.attack + this.release); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
@@ -182,7 +183,7 @@ voice.prototype.stop = function(){
 	clearTimeout(this.timeout);
 }
 
-//loading the sound with XML HTTP REQUEST
+//loading the sounds with XML HTTP REQUEST
 var request = new XMLHttpRequest();
 	request.open('GET','audio/guitar.mp3',true);
 	request.responseType = "arraybuffer";
@@ -200,6 +201,7 @@ var request = new XMLHttpRequest();
 		});
 	};
 request.send();
+
 
 
 
