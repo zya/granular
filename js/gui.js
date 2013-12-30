@@ -106,12 +106,12 @@ function guiinit(){
 	});
 
 	var plus = document.getElementById('plus');
-	minus.addEventListener('touchstart',function(e){
+	plus.addEventListener('touchstart',function(e){
 		e.preventDefault();
 		$('#plus').css('opacity',0.3);
 		trans = trans * 2;
 	});
-	minus.addEventListener('touchend',function(e){
+	plus.addEventListener('touchend',function(e){
 		e.preventDefault();
 		$('#plus').css('opacity',1);
 	});
