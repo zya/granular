@@ -177,6 +177,8 @@ body{
 
 #badge{
 	float: right;
+	position: absolute;
+	right: 15px;
 }
 
 
