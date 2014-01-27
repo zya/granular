@@ -175,6 +175,10 @@ body{
 	font-weight: 100;
 }
 
+#badge{
+	float: bottom;
+}
+
 
 
 
