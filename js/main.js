@@ -78,7 +78,7 @@ function grain(p,buffer,positionx,positiony,attack,release,spread,pan){
 
 	this.randomoffset = (Math.random() * this.spread) - (this.spread / 2); //in seconds
 	///envelope
-	this.source.start(this.now,this.offset + this.randomoffset,this.attack + this.release); //parameters (when,offset,duration)
+	this.source.start(this.now,Math.max(0, this.offset + this.randomoffset),this.attack + this.release); //parameters (when,offset,duration)
 	this.gain.gain.setValueAtTime(0.0, this.now);
 	this.gain.gain.linearRampToValueAtTime(this.amp,this.now + this.attack);
 	this.gain.gain.linearRampToValueAtTime(0,this.now + (this.attack +  this.release) );
